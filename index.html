@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Кейс Бот MiniApp</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+  button { font-size: 18px; margin: 10px; padding: 10px 20px; cursor: pointer; }
+  #balance { font-size: 24px; margin: 20px; }
+  #result { margin-top: 30px; font-size: 22px; color: green; }
+</style>
+</head>
+<body>
+
+<h2>Добро пожаловать в Кейс Бот!</h2>
+<div id="balance">💰 Баланс: загрузка...</div>
+
+<button id="bonusBtn">Получить 3$ (1 раз в час)</button><br/>
+<button id="caseBtn">Открыть кейс (1 раз в час)</button>
+
+<div id="result"></div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+
+  // Функция отправки данных в бот
+  function sendData(action) {
+    tg.sendData(JSON.stringify({ action: action }));
+  }
+
+  // Обновление баланса
+  function updateBalance() {
+    // В Telegram WebApp API нет прямого метода получить баланс, 
+    // поэтому баланс показывает бот сообщениями. 
+    // Здесь можно улучшить через сервер.
+    document.getElementById("balance").textContent = "💰 Баланс обновляется через сообщения бота.";
+  }
+
+  document.getElementById("bonusBtn").onclick = () => {
+    sendData("get_bonus");
+    document.getElementById("result").textContent = "Запрос на получение бонуса отправлен...";
+  };
+
+  document.getElementById("caseBtn").onclick = () => {
+    sendData("open_case");
+    document.getElementById("result").textContent = "Кейс открывается...";
+  };
+
+  updateBalance();
+</script>
+
+</body>
+</html>
