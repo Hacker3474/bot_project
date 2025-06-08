@@ -2,54 +2,63 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Кейс Бот MiniApp</title>
+<title>CaseVisual - Баланс и подарки</title>
 <style>
-  body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
-  button { font-size: 18px; margin: 10px; padding: 10px 20px; cursor: pointer; }
-  #balance { font-size: 24px; margin: 20px; }
-  #result { margin-top: 30px; font-size: 22px; color: green; }
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 320px;
+    margin: 40px auto;
+    text-align: center;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  h1 {
+    margin-bottom: 30px;
+  }
+  .balance {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
 </style>
 </head>
 <body>
+  <h1>CaseVisual</h1>
+  <div class="balance">Баланс: $<span id="balance">0</span></div>
+  <button onclick="showGifts()">🎁 Подарки</button>
+  <button onclick="refill()">➕ Пополнить</button>
 
-<h2>Добро пожаловать в Кейс Бот!</h2>
-<div id="balance">💰 Баланс: загрузка...</div>
+  <script>
+    let balance = 0;
 
-<button id="bonusBtn">Получить 3$ (1 раз в час)</button><br/>
-<button id="caseBtn">Открыть кейс (1 раз в час)</button>
+    // Добавляем +3$ каждые 5 секунд (демо)
+    setInterval(() => {
+      balance += 3;
+      document.getElementById('balance').textContent = balance;
+    }, 5000);
 
-<div id="result"></div>
+    function showGifts() {
+      alert("Подарков пока нет 🎁");
+    }
 
-<script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
-
-  // Функция отправки данных в бот
-  function sendData(action) {
-    tg.sendData(JSON.stringify({ action: action }));
-  }
-
-  // Обновление баланса
-  function updateBalance() {
-    // В Telegram WebApp API нет прямого метода получить баланс, 
-    // поэтому баланс показывает бот сообщениями. 
-    // Здесь можно улучшить через сервер.
-    document.getElementById("balance").textContent = "💰 Баланс обновляется через сообщения бота.";
-  }
-
-  document.getElementById("bonusBtn").onclick = () => {
-    sendData("get_bonus");
-    document.getElementById("result").textContent = "Запрос на получение бонуса отправлен...";
-  };
-
-  document.getElementById("caseBtn").onclick = () => {
-    sendData("open_case");
-    document.getElementById("result").textContent = "Кейс открывается...";
-  };
-
-  updateBalance();
-</script>
-
+    function refill() {
+      alert("Пополнение временно не доступно.");
+    }
+  </script>
 </body>
 </html>
