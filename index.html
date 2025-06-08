@@ -2,63 +2,132 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<title>CaseVisual - Баланс и подарки</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CaseVisual — Баланс</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
   body {
-    font-family: Arial, sans-serif;
-    max-width: 320px;
-    margin: 40px auto;
-    text-align: center;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
+    margin: 0; 
+    background: linear-gradient(135deg, #4a90e2, #9013fe);
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
   }
+
   h1 {
-    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
   }
-  .balance {
-    font-size: 36px;
-    margin-bottom: 30px;
+
+  .balance-box {
+    background: rgba(255,255,255,0.15);
+    padding: 30px 50px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    margin-bottom: 40px;
+    width: 320px;
   }
+
+  .balance-label {
+    font-size: 1.2rem;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+
+  .balance-value {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-top: 5px;
+    animation: fadeInScale 1s ease forwards;
+  }
+
+  @keyframes fadeInScale {
+    from {opacity: 0; transform: scale(0.6);}
+    to {opacity: 1; transform: scale(1);}
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 340px;
+  }
+
   button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    font-size: 18px;
-    cursor: pointer;
+    flex: 1 1 120px;
+    background: #fff;
+    color: #4a90e2;
     border: none;
-    border-radius: 6px;
-    background-color: #007bff;
-    color: white;
-    transition: background-color 0.3s ease;
+    border-radius: 12px;
+    padding: 15px 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255,255,255,0.5);
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none;
   }
+
   button:hover {
-    background-color: #0056b3;
+    background: #357ABD;
+    color: #fff;
+    box-shadow: 0 5px 20px rgba(53,122,189,0.7);
   }
+
+  .info-text {
+    margin-top: 30px;
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 360px;
+    text-align: center;
+    user-select: none;
+  }
+
 </style>
 </head>
 <body>
-  <h1>CaseVisual</h1>
-  <div class="balance">Баланс: $<span id="balance">0</span></div>
-  <button onclick="showGifts()">🎁 Подарки</button>
-  <button onclick="refill()">➕ Пополнить</button>
 
-  <script>
-    let balance = 0;
+<h1>CaseVisual</h1>
 
-    // Добавляем +3$ каждые 5 секунд (демо)
-    setInterval(() => {
-      balance += 3;
-      document.getElementById('balance').textContent = balance;
-    }, 5000);
+<div class="balance-box">
+  <div class="balance-label">Ваш баланс</div>
+  <div class="balance-value" id="balanceValue">Загрузка...</div>
+</div>
 
-    function showGifts() {
-      alert("Подарков пока нет 🎁");
+<div class="buttons">
+  <button onclick="alert('Пополнение пока недоступно')">➕ Пополнить</button>
+  <button onclick="alert('Подарков пока нет')">🎁 Подарки</button>
+  <button onclick="alert('Информация о боте')">ℹ️ Инфо</button>
+</div>
+
+<div class="info-text">Бонус +3$ каждые 60 минут автоматически</div>
+
+<script>
+  async function fetchBalance() {
+    try {
+      // TODO: заменить URL на свой API
+      const res = await fetch('/api/balance');
+      if (!res.ok) throw new Error('Ошибка сети');
+      const data = await res.json();
+      document.getElementById('balanceValue').textContent = `$${data.balance}`;
+    } catch (e) {
+      console.error(e);
+      document.getElementById('balanceValue').textContent = 'Ошибка загрузки';
     }
+  }
+  
+  fetchBalance();
+  setInterval(fetchBalance, 60000); // Обновлять каждую минуту
+</script>
 
-    function refill() {
-      alert("Пополнение временно не доступно.");
-    }
-  </script>
 </body>
 </html>
